@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Company's - Fluxeco{% endblock %}
+{% block page_title %}Company's{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for company in companies %}
+    <div class="bg-white rounded-xl shadow p-0 flex flex-col overflow-hidden relative">
+        <div class="relative">
+            <img src="{{ company.image }}" alt="{{ company.name }}" class="w-full h-40 object-cover">
+            {% if company.almost_sold_out %}
+            <span class="absolute top-3 left-3 bg-indigo-900 text-white text-xs font-semibold px-3 py-1 rounded">Best Buyer</span>
+            {% endif %}
+        </div>
+        <div class="p-4 flex-1 flex flex-col">
+            <div class="flex flex-wrap gap-2 mb-2">
+                <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded">{{ company.location }}</span>
+            </div>
+            <div class="font-bold text-lg text-indigo-900 mb-1">{{ company.name }}</div>
+            <div class="text-gray-600 text-sm mb-2 line-clamp-2">{{ company.description }}</div>
+            <a href="#" class="text-indigo-700 text-sm font-medium hover:underline mb-2">Lees meer</a>
+            <div class="text-xs text-gray-500 mb-1 flex justify-between">
+                <span>Reeds Gekozen door andere klanten</span>
+                <span>{{ company.ordered_percent }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                <div class="bg-green-400 h-2 rounded-full" style="width: {{ company.ordered_percent }}%"></div>
+            </div>
+            <button class="mt-auto bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded-lg transition">Kies</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

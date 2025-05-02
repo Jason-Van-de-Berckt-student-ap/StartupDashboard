@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fluxeco{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white flex flex-col justify-between border-r">
+            <div>
+                <div class="flex items-center h-16 px-6">
+                    <span class="text-2xl font-bold text-green-500">Fluxeco</span>
+                </div>
+                <nav class="mt-6">
+                    <a href="{{ url_for('dashboard') }}" class="flex items-center px-6 py-3 hover:bg-blue-50 {{ 'bg-blue-100 text-blue-600 font-semibold' if active_page == 'dashboard' else 'text-gray-700' }} rounded-r-full mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('companies') }}" class="flex items-center px-6 py-3 hover:bg-blue-50 {{ 'bg-blue-100 text-blue-600 font-semibold' if active_page == 'companies' else 'text-gray-700' }} rounded-r-full mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21V9l6 6V9l6 6V9l6 6v6H3z"/><rect x="1" y="21" width="22" height="2"/></svg>
+                        Company's
+                    </a>
+                    <a href="{{ url_for('fluvius') }}" class="flex items-center px-6 py-3 hover:bg-blue-50 {{ 'bg-blue-100 text-blue-600 font-semibold' if active_page == 'fluvius' else 'text-gray-700' }} rounded-r-full mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8L21 10h-9l1-8z"/></svg>
+                        My Fluvius
+                    </a>
+                </nav>
+            </div>
+            <div class="mb-6">
+                <a href="#" class="flex items-center px-6 py-2 text-gray-600 hover:text-blue-600">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                    Settings
+                </a>
+                <a href="{{ url_for('logout') }}" class="flex items-center px-6 py-2 text-gray-600 hover:text-red-600">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"/></svg>
+                    Logout
+                </a>
+            </div>
+        </aside>
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Topbar -->
+            <header class="bg-white shadow flex items-center justify-between px-8 h-16">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <span class="font-semibold text-lg">{% block page_title %}{% endblock %}</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">1</span>
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full" alt="User">
+                        <span class="font-medium">Jason Van de Berckt</span>
+                    </div>
+                </div>
+            </header>
+            <main class="flex-1 p-8 bg-gray-100">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html> 

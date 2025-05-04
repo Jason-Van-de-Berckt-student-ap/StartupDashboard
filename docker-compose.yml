@@ -19,13 +19,8 @@ services:
       - "traefik.http.routers.fluxeco-dashboard-http.rule=Host(`dashboard.fluxeco.be`)"
       - "traefik.http.routers.fluxeco-dashboard-http.entrypoints=web"
       - "traefik.http.routers.fluxeco-dashboard-http.service=fluxeco-dashboard@docker"
-    environment:
-      - FLASK_APP=${FLASK_APP}
-      - FLASK_ENV=${FLASK_ENV}
-      - FLASK_DEBUG=${FLASK_DEBUG}
-      - SECRET_KEY=${SECRET_KEY}
-      - USER_EMAIL=${USER_EMAIL}
-      - USER_PASSWORD=${USER_PASSWORD}
+    env_file:
+      - .env
 networks:
   traefik:
     external: true

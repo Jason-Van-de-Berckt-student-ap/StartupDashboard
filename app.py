@@ -1,29 +1,30 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask import Flask, render_template, redirect, url_for, flash, request
+from kinde_sdk import Configuration
+from kinde_sdk.kinde_api_client import GrantType, KindeApiClient
 import os
 from datetime import datetime, timedelta
 import random
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
 
-# User data from environment variables
-class User(UserMixin):
-    def __init__(self, id, username, password):
-        self.id = id
-        self.username = username
-        self.password = password
+KINDE_HOST = os.getenv('KINDE_HOST')
+KINDE_CLIENT_ID = os.getenv('KINDE_CLIENT_ID')
+KINDE_CLIENT_SECRET = os.getenv('KINDE_CLIENT_SECRET')
+KINDE_REDIRECT_URL = os.getenv('KINDE_REDIRECT_URL')
+KINDE_POST_LOGOUT_REDIRECT_URL = os.getenv('KINDE_POST_LOGOUT_REDIRECT_URL')
+GRANT_TYPE = GrantType.AUTHORIZATION_CODE
 
-users = {
-    '1': User('1', os.getenv('USER_EMAIL', 'demo@example.com'), os.getenv('USER_PASSWORD', 'password123'))
+configuration = Configuration(host=KINDE_HOST)
+kinde_api_client_params = {
+    "configuration": configuration,
+    "domain": KINDE_HOST,
+    "client_id": KINDE_CLIENT_ID,
+    "client_secret": KINDE_CLIENT_SECRET,
+    "grant_type": GRANT_TYPE,
+    "callback_url": KINDE_REDIRECT_URL
 }
-
-@login_manager.user_loader
-def load_user(user_id):
-    return users.get(user_id)
+kinde_client = KindeApiClient(**kinde_api_client_params)
 
 # Generate dummy energy consumption data
 def generate_energy_data():
@@ -38,34 +39,42 @@ def generate_energy_data():
         })
     return data
 
+@app.context_processor
+def inject_user():
+    user = kinde_client.get_user_details() if kinde_client.is_authenticated() else None
+    return dict(user=user)
+
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
+    if kinde_client.is_authenticated():
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        
-        user = next((u for u in users.values() if u.username == email), None)
-        if user and user.password == password:
-            login_user(user)
-            return redirect(url_for('dashboard'))
-        flash('Invalid email or password')
-    return render_template('login.html')
+    return redirect(kinde_client.get_login_url())
+
+@app.route('/register')
+def register():
+    return redirect(kinde_client.get_register_url())
+
+@app.route('/callback')
+def callback():
+    kinde_client.fetch_token(authorization_response=request.url)
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
-@login_required
 def dashboard():
+    if not kinde_client.is_authenticated():
+        return redirect(url_for('login'))
     energy_data = generate_energy_data()
-    return render_template('dashboard.html', energy_data=energy_data, active_page='dashboard')
+    user = kinde_client.get_user_details()
+    return render_template('dashboard.html', energy_data=energy_data, active_page='dashboard', user=user)
 
 @app.route('/companies')
-@login_required
 def companies():
+    if not kinde_client.is_authenticated():
+        return redirect(url_for('login'))
     companies = [
         {
             'name': 'Bedrijf A',
@@ -103,15 +112,14 @@ def companies():
     return render_template('companies.html', companies=companies, active_page='companies')
 
 @app.route('/fluvius')
-@login_required
 def fluvius():
+    if not kinde_client.is_authenticated():
+        return redirect(url_for('login'))
     return render_template('fluvius.html', active_page='fluvius')
 
 @app.route('/logout')
-@login_required
 def logout():
-    logout_user()
-    return redirect(url_for('login'))
+    return redirect(kinde_client.logout(redirect_to=KINDE_POST_LOGOUT_REDIRECT_URL))
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)

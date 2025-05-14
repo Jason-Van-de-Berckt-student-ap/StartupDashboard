@@ -4,21 +4,8 @@ services:
     restart: unless-stopped
     volumes:
       - .:/app
-    networks:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.fluxeco-dashboard.rule=Host(`dashboard.fluxeco.be`)"
-      - "traefik.http.routers.fluxeco-dashboard.entrypoints=websecure"
-      - "traefik.http.routers.fluxeco-dashboard.tls=true"
-      - "traefik.http.routers.fluxeco-dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.fluxeco-dashboard.loadbalancer.server.port=5000"
-      - "traefik.http.services.fluxeco-dashboard.loadbalancer.server.scheme=http"
-      - "traefik.http.routers.fluxeco-dashboard.service=fluxeco-dashboard@docker"
-      - "traefik.http.routers.fluxeco-dashboard-http.rule=Host(`dashboard.fluxeco.be`)"
-      - "traefik.http.routers.fluxeco-dashboard-http.entrypoints=web"
-      - "traefik.http.routers.fluxeco-dashboard-http.service=fluxeco-dashboard@docker"
+    ports:
+      - "15000:5000"
     environment:
       - FLASK_APP=${FLASK_APP}
       - FLASK_ENV=${FLASK_ENV}
@@ -26,6 +13,3 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - USER_EMAIL=${USER_EMAIL}
       - USER_PASSWORD=${USER_PASSWORD}
-networks:
-  traefik:
-    external: true

@@ -1,8 +1,118 @@
 {% extends 'base.html' %}
-{% block title %}My Fluvius - Fluxeco{% endblock %}
-{% block page_title %}My Fluvius{% endblock %}
+{% block title %}Mijn meters - Fluxeco{% endblock %}
+{% block page_title %}Mijn meters{% endblock %}
 {% block content %}
-<div class="flex flex-col items-center justify-center h-96">
-    <button class="bg-blue-500 hover:bg-blue-600 text-white text-xl font-semibold py-4 px-16 rounded-lg shadow">Login</button>
+<div class="flex flex-wrap gap-6 justify-start" id="meters-container">
+    <!-- Meterkaarten worden hier dynamisch toegevoegd -->
+    <div id="add-meter-card" class="w-80 min-h-[380px] bg-gray-200 border-2 border-gray-400 rounded-xl shadow-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition hover:bg-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)]" onclick="addMeter()">
+        <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+        </div>
+        <div class="font-bold text-lg text-gray-900 mb-1">Meter toevoegen</div>
+        <div class="text-gray-500 text-sm">Klik om een nieuwe meter toe te voegen</div>
+    </div>
 </div>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-all duration-500 opacity-0 pointer-events-none">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-8 relative animate-slide-in-up">
+        <div class="flex flex-col items-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mb-4"></div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">U wordt omgeleid naar de Fluvius website</h2>
+            <p class="text-gray-600 text-center mb-2">Even geduld alstublieft...</p>
+            <p class="text-gray-600 text-center text-sm">Zodra wij uw meter zijn in ons systeem wordt uw meter toegevoegd.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Success Notification -->
+<div id="success-notification" class="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-lg shadow-lg transition-all duration-500 transform translate-x-[120%]">
+    <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span>Meter succesvol toegevoegd!</span>
+    </div>
+</div>
+
+<style>
+@keyframes slide-in-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-in-up {
+  animation: slide-in-up 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes fade-in { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: none; } }
+.animate-fade-in { animation: fade-in 0.5s cubic-bezier(0.4,0,0.2,1); }
+</style>
+
+<script>
+let meterId = 0;
+
+function showLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    overlay.style.opacity = '1';
+    overlay.style.pointerEvents = 'auto';
+}
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+}
+
+function showSuccessNotification() {
+    const notification = document.getElementById('success-notification');
+    notification.style.transform = 'translateX(0)';
+    setTimeout(() => {
+        notification.style.transform = 'translateX(120%)';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 500);
+    }, 5000);
+}
+
+function addMeter() {
+    const addCard = document.getElementById('add-meter-card');
+    addCard.classList.add('pointer-events-none', 'opacity-60');
+    
+    // Show loading overlay
+    showLoadingOverlay();
+    
+    // After 5 seconds, hide overlay and add meter
+    setTimeout(() => {
+        hideLoadingOverlay();
+        meterId++;
+        const container = document.getElementById('meters-container');
+        const meterCard = document.createElement('div');
+        meterCard.className = 'w-80 min-h-[380px] bg-gray-200 border-2 border-gray-400 rounded-xl shadow-2xl p-6 flex flex-col items-center relative animate-fade-in hover:bg-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)]';
+        meterCard.id = 'meter-' + meterId;
+        meterCard.innerHTML = `
+            <img src="/static/meter.jpg" alt="Digitale meter" class="w-full h-44 object-cover rounded-lg mb-4" />
+            <div class="font-bold text-lg text-gray-900 mb-1">Digitale meter #${meterId}</div>
+            <div class="text-xs text-gray-700 mb-2">EAN-nummer: <span class="font-mono">${'5414489' + String(Math.floor(Math.random()*1e11)).padStart(11, '0')}</span></div>
+            <div class="text-gray-600 text-sm mb-2">Eigen verbruik: <span class="font-semibold">${(Math.random()*4000+1000).toFixed(0)} kWh</span></div>
+            <div class="text-gray-600 text-sm mb-4">Terug op het net: <span class="font-semibold">${(Math.random()*2000).toFixed(0)} kWh</span></div>
+            <button onclick="removeMeter('meter-${meterId}')" class="absolute top-3 right-3 bg-red-100 hover:bg-red-200 text-red-600 rounded-full p-2 transition" title="Verwijder meter">
+                <svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'/></svg>
+            </button>
+        `;
+        container.insertBefore(meterCard, addCard);
+        addCard.classList.remove('pointer-events-none', 'opacity-60');
+        
+        // Reset and show success notification
+        const notification = document.getElementById('success-notification');
+        notification.style.display = 'block';
+        showSuccessNotification();
+    }, 5000);
+}
+
+function removeMeter(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+}
+</script>
 {% endblock %} 

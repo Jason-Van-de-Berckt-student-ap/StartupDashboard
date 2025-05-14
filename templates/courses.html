@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Cursusmateriaal</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Course Card 1 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">Basis Energie Management</h2>
+                <p class="text-gray-600 mb-4">Een introductie in energie management en duurzaamheid.</p>
+                <a href="#" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+
+        <!-- Course Card 2 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">Groene Energie Opties</h2>
+                <p class="text-gray-600 mb-4">Overzicht van verschillende groene energie oplossingen.</p>
+                <a href="#" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+
+        <!-- Course Card 3 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">Energie Besparing</h2>
+                <p class="text-gray-600 mb-4">Praktische tips voor energie besparing in bedrijven.</p>
+                <a href="#" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

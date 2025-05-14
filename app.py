@@ -73,15 +73,17 @@ def companies():
             'location': 'Tailfer',
             'description': 'Bedrijfs informatie',
             'ordered_percent': 56,
-            'almost_sold_out': False
+            'almost_sold_out': False,
+            'energy_request': 'Ik wil 50.000 kWh groene stroom kopen in 3 maanden, tegen €0,10/kWh.'
         },
         {
-            'name': 'KBedrijf B',
+            'name': 'Bedrijf B',
             'image': 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
             'location': 'Sint-Niklaas',
             'description': 'Bedrijfs informatie',
             'ordered_percent': 80,
-            'almost_sold_out': True
+            'almost_sold_out': True,
+            'energy_request': 'Wij zoeken 120.000 kWh zonne-energie voor het komende jaar, maximaal €0,12/kWh.'
         },
         {
             'name': 'Bedrijf C',
@@ -89,7 +91,8 @@ def companies():
             'location': 'Mettet',
             'description': 'Bedrijfs informatie',
             'ordered_percent': 70,
-            'almost_sold_out': False
+            'almost_sold_out': False,
+            'energy_request': 'Geïnteresseerd in 30.000 kWh windenergie, levering binnen 6 maanden, €0,11/kWh.'
         },
         {
             'name': 'Bedrijf D',
@@ -97,7 +100,8 @@ def companies():
             'location': 'Tessenderlo',
             'description': 'Bedrijfs informatie',
             'ordered_percent': 30,
-            'almost_sold_out': False
+            'almost_sold_out': False,
+            'energy_request': 'Op zoek naar 75.000 kWh groene stroom, flexibel in afname, €0,09/kWh.'
         },
     ]
     return render_template('companies.html', companies=companies, active_page='companies')

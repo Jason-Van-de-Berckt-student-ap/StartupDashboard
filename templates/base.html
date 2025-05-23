@@ -9,7 +9,7 @@
 <body class="bg-gray-100 min-h-screen">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white flex flex-col justify-between border-r">
+        <aside id="sidebar" class="w-64 bg-white flex flex-col justify-between border-r fixed lg:static inset-y-0 left-0 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
             <div>
                 <div class="flex items-center h-16 px-6">
                     <img src="{{ url_for('static', filename='Fluxeci.png') }}" alt="Fluxeco logo" class="h-18 w-auto max-w-[160px]" style="filter: invert(1);" />
@@ -40,12 +40,14 @@
                 </a>
             </div>
         </aside>
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
         <!-- Main content -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col lg:ml-0">
             <!-- Topbar -->
             <header class="bg-white shadow flex items-center justify-between px-8 h-16">
                 <div class="flex items-center space-x-4">
-                    <button class="lg:hidden focus:outline-none">
+                    <button id="hamburger" class="lg:hidden focus:outline-none" onclick="openSidebar()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
                     <span class="font-semibold text-lg">{% block page_title %}{% endblock %}</span>
@@ -66,5 +68,35 @@
             </main>
         </div>
     </div>
+    <script>
+    function openSidebar() {
+        document.getElementById('sidebar').style.transform = 'translateX(0)';
+        document.getElementById('sidebar-overlay').classList.remove('hidden');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').style.transform = 'translateX(-100%)';
+        document.getElementById('sidebar-overlay').classList.add('hidden');
+    }
+    // Sluit sidebar bij resize naar desktop
+    window.addEventListener('resize', function() {
+        if(window.innerWidth >= 1024) {
+            document.getElementById('sidebar').style.transform = 'translateX(0)';
+            document.getElementById('sidebar-overlay').classList.add('hidden');
+        } else {
+            document.getElementById('sidebar').style.transform = 'translateX(-100%)';
+        }
+    });
+    </script>
+    <style>
+    @media (min-width: 1024px) {
+        #sidebar {
+            transform: translateX(0) !important;
+            position: static !important;
+        }
+        #sidebar-overlay {
+            display: none !important;
+        }
+    }
+    </style>
 </body>
-</html> 
+</html>

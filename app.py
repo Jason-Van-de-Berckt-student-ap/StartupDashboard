@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import os
 from datetime import datetime, timedelta
@@ -37,6 +37,12 @@ def generate_energy_data():
             'consumption': round(consumption, 2)
         })
     return data
+
+# Tijdelijke opslag voor demo
+user_settings = {
+    'rekeningnummer': '',
+    'profile_pic_url': None
+}
 
 @app.route('/')
 def index():
@@ -111,6 +117,25 @@ def companies():
 def fluvius():
     return render_template('fluvius.html', active_page='fluvius')
 
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    global user_settings
+    success = False
+    if request.method == 'POST':
+        rekeningnummer = request.form.get('rekeningnummer', '')
+        user_settings['rekeningnummer'] = rekeningnummer
+        # Profielfoto uploaden
+        if 'profile_pic' in request.files:
+            file = request.files['profile_pic']
+            if file and file.filename:
+                filename = f"profile_{current_user.id}.jpg"
+                filepath = os.path.join('static', filename)
+                file.save(filepath)
+                user_settings['profile_pic_url'] = url_for('static', filename=filename)
+        success = True
+    return render_template('settings.html', rekeningnummer=user_settings['rekeningnummer'], profile_pic_url=user_settings['profile_pic_url'], success=success, active_page='settings')
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -118,4 +143,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)

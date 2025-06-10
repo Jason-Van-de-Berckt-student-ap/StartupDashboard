@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Company's - Fluxeco{% endblock %}
-{% block page_title %}Company's{% endblock %}
+{% block title %}Companies - Fluxeco{% endblock %}
+{% block page_title %}Companies{% endblock %}
 {% block content %}
 <div id="companies-main" class="transition-all duration-500">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -19,13 +19,13 @@
             </div>
             <div class="font-bold text-lg text-indigo-900 mb-1">{{ company.name }}</div>
             <div class="text-gray-600 text-sm mb-2 line-clamp-2">{{ company.description }}</div>
-            <a href="#" class="text-indigo-700 text-sm font-medium hover:underline mb-2">Lees meer</a>
+            <a href="#" class="text-indigo-700 text-sm font-medium hover:underline mb-2">Read more</a>
             <div class="text-blue-900 text-xs mb-2 font-medium">{{ company.energy_request }}</div>
             <div class="text-xs text-gray-500 mb-1 flex justify-end">
-                <span>{{ company.ordered_percent }}% van de gevraagde stroom geleverd</span>
+                <span>{{ company.ordered_percent }}% of the requested power delivered</span>
             </div>
             <div class="flex items-center gap-2 mb-3">
-                <!-- Batterij-icoon -->
+                <!-- Battery icon -->
                 <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="1" y="3" width="26" height="10" rx="3" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2"/>
                   <rect x="3" y="5" width="{{ battery_fill }}" height="6" rx="2" fill="#22c55e"/>
@@ -35,7 +35,7 @@
                     <div class="bg-green-400 h-2 rounded-full" style="width: {{ company.ordered_percent }}%"></div>
                 </div>
             </div>
-            <button class="mt-auto bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded-lg transition" onclick="openGuide()">Kies</button>
+            <button class="mt-auto bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded-lg transition" onclick="openGuide()">Choose</button>
         </div>
     </div>
     {% endfor %}
@@ -45,26 +45,26 @@
 <div id="guide-tab" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-all duration-500 opacity-0 pointer-events-none">
     <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-8 relative animate-slide-in-up">
         <button onclick="closeGuide()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-        <h2 class="text-2xl font-bold text-indigo-900 mb-6 text-center">Koppelingsgids</h2>
+        <h2 class="text-2xl font-bold text-indigo-900 mb-6 text-center">Linking Guide</h2>
         <ol class="space-y-6">
             <li>
                 <div class="flex items-center mb-2">
                     <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">1</span>
-                    <span class="font-semibold text-gray-800">Stap 1</span>
+                    <span class="font-semibold text-gray-800">Step 1</span>
                 </div>
                 <div class="text-gray-600 text-sm ml-11">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</div>
             </li>
             <li>
                 <div class="flex items-center mb-2">
                     <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">2</span>
-                    <span class="font-semibold text-gray-800">Stap 2</span>
+                    <span class="font-semibold text-gray-800">Step 2</span>
                 </div>
                 <div class="text-gray-600 text-sm ml-11">Suspendisse potenti. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh.</div>
             </li>
             <li>
                 <div class="flex items-center mb-2">
                     <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">3</span>
-                    <span class="font-semibold text-gray-800">Stap 3</span>
+                    <span class="font-semibold text-gray-800">Step 3</span>
                 </div>
                 <div class="text-gray-600 text-sm ml-11">Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem.</div>
             </li>
@@ -90,4 +90,4 @@ function closeGuide() {
     document.getElementById('guide-tab').style.pointerEvents = 'none';
 }
 </script>
-{% endblock %} 
+{% endblock %}

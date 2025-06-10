@@ -74,40 +74,40 @@ def dashboard():
 def companies():
     companies = [
         {
-            'name': 'Bedrijf A',
+            'name': 'Company A',
             'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
             'location': 'Tailfer',
-            'description': 'Bedrijfs informatie',
+            'description': 'Company information',
             'ordered_percent': 56,
             'almost_sold_out': False,
-            'energy_request': 'Ik wil 50.000 kWh groene stroom kopen in 3 maanden, tegen €0,10/kWh.'
+            'energy_request': 'I want to buy 50,000 kWh of green electricity in 3 months, at €0.10/kWh.'
         },
         {
-            'name': 'Bedrijf B',
+            'name': 'Company B',
             'image': 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
             'location': 'Sint-Niklaas',
-            'description': 'Bedrijfs informatie',
+            'description': 'Company information',
             'ordered_percent': 80,
             'almost_sold_out': True,
-            'energy_request': 'Wij zoeken 120.000 kWh zonne-energie voor het komende jaar, maximaal €0,12/kWh.'
+            'energy_request': 'We are looking for 120,000 kWh of solar energy for the coming year, maximum €0.12/kWh.'
         },
         {
-            'name': 'Bedrijf C',
+            'name': 'Company C',
             'image': 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80',
             'location': 'Mettet',
-            'description': 'Bedrijfs informatie',
+            'description': 'Company information',
             'ordered_percent': 70,
             'almost_sold_out': False,
-            'energy_request': 'Geïnteresseerd in 30.000 kWh windenergie, levering binnen 6 maanden, €0,11/kWh.'
+            'energy_request': 'Interested in 30,000 kWh of wind energy, delivery within 6 months, €0.11/kWh.'
         },
         {
-            'name': 'Bedrijf D',
+            'name': 'Company D',
             'image': 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
             'location': 'Tessenderlo',
-            'description': 'Bedrijfs informatie',
+            'description': 'Company information',
             'ordered_percent': 30,
             'almost_sold_out': False,
-            'energy_request': 'Op zoek naar 75.000 kWh groene stroom, flexibel in afname, €0,09/kWh.'
+            'energy_request': 'Looking for 75,000 kWh of green electricity, flexible in delivery, €0.09/kWh.'
         },
     ]
     return render_template('companies.html', companies=companies, active_page='companies')
